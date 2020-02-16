@@ -16,7 +16,7 @@ The demo application is a HTTP based chat, consisting of a server and clients in
 
  * Written in Java / Spring-Boot.
    * Messages are "pushed" uniquely over HTTP/REST-endpoints.
-   * The server internally uses the [Asynchronous Rest Library (ASR)](https://github.com/kartoffelquadrat/AsyncRestLib).  
+   * The server internally uses the [Asynchronous Rest Library (ARL)](https://github.com/kartoffelquadrat/AsyncRestLib).  
    => [Take me to the interesting part of the code](server/src/main/java/eu/kartoffelquadrat/asyncrestdemo/StateController.java)
 
 ### Chat clients
@@ -27,7 +27,7 @@ The demo application is a HTTP based chat, consisting of a server and clients in
      * Firefox on iOS / Android / MacOS
      * Chrome on Android / MacOS  
    * Implicitly powered up together with the server. Accessible at ```http://127.0.0.1:8446/```  
-   => [Take me to the interesting part of the code](javaclient/src/main/java/eu/kartoffelquadrat/asyncrestdemo/client/LongPollLoop.java)
+   => [Take me to the interesting part of the code](server/src/main/resources/static/savefetch.js)
         
  * A Bash command line chat client. Composed of two scripts:
    * A bash script for sending messages. (Nothing special here)
