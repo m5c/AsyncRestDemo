@@ -1,0 +1,16 @@
+body{
+    background: #505050;
+    -webkit-background-size:cover;
+    -moz-background-size:cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.container{
+    background: #f6f3f5;
+}
+
+.fill {
+    min-height: 100vh;
+    height: 100%;
+}
