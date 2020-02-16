@@ -4,7 +4,7 @@ Just a little hands-on help, to get started with the ARL.
 
 ## About
 
-This repository hosts a demo asynchronous REST-backend, internally powered by the [Asynchronous Rest Library (ASR)](https://github.com/kartoffelquadrat/AsyncRestLib). Additionally, there are client-side counterparts.
+This repository hosts a demo asynchronous REST-backend, internally powered by the [Asynchronous Rest Library (ARL)](https://github.com/kartoffelquadrat/AsyncRestLib). Additionally, there are client-side counterparts.
  * The code here is meant as support for developers who want to use the ARL in their projects.
  * This is not an explanation of the library. For more information, consult the [official README](https://github.com/kartoffelquadrat/AsyncRestLib), or read the [official JavaDocs](https://kartoffelquadrat.github.io/AsyncRestLib/eu/kartoffelquadrat/asyncrestlib/package-summary.html).
 
