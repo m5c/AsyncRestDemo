@@ -38,7 +38,7 @@ while [[ $http_status = 200 || $http_status = 408 ]]; do
         HASH=$(md5 -qs "$http_content")
 
 	# print content
-        echo $http_content | sed  's/:/\'$'\n/' | grep -A1 line | grep -v line | sed 's/}//' | sed s/\"//g
+        echo $http_content | cut -c 10- | rev | cut -c 3- | rev
     fi
 done
 	
