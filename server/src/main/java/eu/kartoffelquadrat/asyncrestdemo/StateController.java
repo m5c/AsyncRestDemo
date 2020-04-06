@@ -56,7 +56,7 @@ public class StateController {
      *
      * @return a json string, encoding the update.
      */
-    @GetMapping(value = "/getupdate")
+    @GetMapping(value = "/getupdate", produces = "application/json; charset=utf-8")
     // (different clients may need different updates)
     public DeferredResult<ResponseEntity<String>> asyncGetState(@RequestParam(required = false) String hash) {
 
@@ -91,7 +91,7 @@ public class StateController {
      * @param tag  as the tag to be passed to the transformer hook.
      * @return a json string, encoding the update.
      */
-    @GetMapping(value = "/getupdate/{clienttag}")
+    @GetMapping(value = "/getupdate/{clienttag}", produces = "application/json; charset=utf-8")
     // version.
     // (different clients may need different updates)
     public DeferredResult<ResponseEntity<String>> asyncHookedGetState(String hash, @PathVariable(value = "clienttag")
@@ -107,14 +107,14 @@ public class StateController {
      * Synchronous Rest endpoint. Callable by chat clients.<br/> curl --header "Content-Type: text/plain" --request POST
      * --data 'toto'   http://127.0.0.1:8446/sendMessage
      *
-     * @param payload as the message to be sent
+     * @param inboundMessage as the received message that shall be propagated to other chat participants.
      */
-    @PostMapping(value = "/sendMessage", consumes = "text/plain")
-    public void sendMessage(@RequestBody String payload) {
+    @PostMapping(value = "/sendMessage", consumes = "application/json")
+    public void sendMessage(@RequestBody InboundMessage inboundMessage) {
 
         // Print message in server log, then update internal broadcast content to notify all connected clients about
         // the new message
-        System.out.println(payload);
-        broadcastContentManager.updateBroadcastContent(new ChatMessage(payload));
+        System.out.println(inboundMessage);
+        broadcastContentManager.updateBroadcastContent(new ChatMessage(inboundMessage.toString()));
     }
 }

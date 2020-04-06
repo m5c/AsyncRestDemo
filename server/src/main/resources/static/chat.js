@@ -29,7 +29,7 @@ function enableJSElements() {
     $('#clear-button').on('click', clearHistory);
 
     // start long polling for incoming chat messages
-    recursiveLongPoll("getupdate?hash=", addMessageToLogAndBuffer, printErrorLog);
+    recursiveLongPoll("getupdate?hash=", addMessageToLogAndBuffer, printErrorLog, "");
 }
 
 /**
@@ -38,20 +38,12 @@ function enableJSElements() {
 function readThenClearAndSend() {
     let name = $('#clientName');
     let field = $('#messageField');
-    sendMessage(name.val() + ": " + field.val())
+    let message = { "sender":name.val(), "line": field.val()};
+    console.log(message);
+    postToApi(message, "/sendMessage");
 
     // clear the field after the message was sent
     field.val('')
-}
-
-/**
- * sends a chat text-string to the server, using the dedicated "/sendMessage" endpoint (POST)
- */
-function sendMessage(message) {
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "/sendMessage", true);
-    xhr.setRequestHeader('Content-Type', 'text/plain');
-    xhr.send(message);
 }
 
 /**
@@ -70,11 +62,18 @@ function printErrorLog(returnCode) {
  * and the embedded chat-message is added to the log.
  * @param data as the raw json string of the server reply-body
  */
-function addMessageToLogAndBuffer(data) {
+function addMessageToLogAndBuffer(newmessage) {
+
+    console.log("adding to buffer: "+newmessage);
     let logger = $('#message-log');
-    var newmessage = JSON.parse(data);
-    logger.text(newmessage.line + "\n" + logger.text());
-}
+    if (logger.text() === "") {
+        logger.text(newmessage.line);
+    } else {
+        logger.text(logger.text() + "\n" + newmessage.line);
+    }
+
+    // scroll to bottom
+    $('#message-log').scrollTop($('#message-log')[0].scrollHeight);}
 
 /**
  * removes all messages from log.

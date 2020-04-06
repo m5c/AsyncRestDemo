@@ -40,7 +40,7 @@ public class ServerLauncher {
         context = SpringApplication.run(ServerLauncher.class, args);
 
         // Prepare content that shall be asynchronously broadcast to clients by this library
-        BroadcastContent broadcastContent = new ChatMessage("[INIT]");
+        BroadcastContent broadcastContent = new ChatMessage("");
 
         // Register content at libraries content manager
         broadcastContentManager = new BroadcastContentManager(broadcastContent);
