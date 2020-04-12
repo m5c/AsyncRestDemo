@@ -1,66 +1,52 @@
 /**
- * Functionality related to the actual long-polling (Commmuniucation with the AsyncRestLib-enabled backend)
- */
-
-/**
- * **************************************************************************************************************
- * ** THIS IS THE ASYNC LONG POLL MAIN CONTROL LOOP THAT YOU ARE INTERESTED IN IF YOU ARE AN ASYNCRESTLIB USER **
- * **************************************************************************************************************
+ * Functionality related to repeated long polling on a resource.
+ * As an ARL user you would typically call this function, to subscribe for updates on a given resource.
  *
- * Main recursive poll for updates, until the server relied with a non-200/408 return code.
- * The recursiveness is, the function considers 200 and 408 a success, that motivates enchaining with a self-call.
- * The fetch includes various other error handling. Credit for a good error-handling basis goes to:
+ * How it works: Once launched recursive polls for updates, until the server relied with a 200 or non-408 return code.
+ * That is to say:
+ * If 200 was returned, the success function is called. Then new long polling is automatically started, based on the hash of the received content.
+ * If 408 was returned, a subsequent long poll on the same resource is immediately fired.
+ * If anything else was returned, the error function is called.
+ * Credit for a good error-handling basis goes to:
  * -> https://css-tricks.com/using-fetch/
- * @param serverurl as the remore REST enpoint on which you want to repeatedly long-poll
- * @param successFunction as the function to execute upon every success (RT:200)
- * @param errorFunction as the function you want to execute on every non-200/non-408
  */
-function recursiveLongPoll(serverurl, successFunction, errorFunction, currentContent) {
-    console.log("Polling: "+serverurl+md5(currentContent, false, false));
-    fetch(serverurl+md5(currentContent, false, false))
-        .then((response) => {
-            return response.json();
-        })
-        .then((text) => {
-            console.log("Yay!");
-        })
-        .catch((e) => {
-            console.log("Nooooo!");
-            // error in e.message
-        });
+function observeResource(serverurl, successFunction, errorFunction, currentContent) {
+    console.log("Polling: " + serverurl + md5(currentContent, false, false));
+    fetch(serverurl + md5(currentContent, false, false))
+        .then(reply => {
+            verifyReturnCode(reply, 200);
+            verifyJsonContentType(reply);
 
-        // .then(reply => {
-        //     console.log("1");
-        //     verifyReturnCode(reply, 200);
-        //     console.log("2");
-        //     verifyJsonContentType(reply);
-        //     console.log("3");
-        //     return extractJsonObject(reply);
-        // })
-        // .catch(error => {
-        //     console.log("...")
-        //     handleNon200(error.status, serverurl, successFunction, errorFunction, currentContent)
-        // })
-        // .then(payloadAsObject => {
-        //     currentContent = JSON.stringify(payloadAsObject);
-        //     successFunction(payloadAsObject);
-        //     // Next line leads to infinite loop. Server replies although hashes should mismatch.
-        //    recursiveLongPoll(serverurl, successFunction, errorFunction, currentContent);
-        // })
+            // This happens only in casse the previous line passed (so we know the server erplied with 200)
+            return extractJsonObject(reply);
+        })
+        .then(payloadAsObject => {
+
+            // In reaction to the previous return (which is a promise), we call the success function with the extracted data.
+            currentContent = JSON.stringify(payloadAsObject);
+            successFunction(payloadAsObject);
+            // Next line leads to infinite loop. Server replies although hashes should mismatch.
+            observeResource(serverurl, successFunction, errorFunction, currentContent);
+        })
+        .catch(error => {
+            handleNon200(error, serverurl, successFunction, errorFunction, currentContent)
+        })
 }
 
 /**
  * Error handling for non200 return codes. In case of a timeout, keep polling. In case of any other return code, stop.
  */
-function handleNon200(returnCode, serverurl, successFunction, errorFunction, currentContent) {
+function handleNon200(error, serverurl, successFunction, errorFunction, currentContent) {
 
-    console.log("Server replied with a non 200... -> "+returnCode);
+    console.log("Server replied with a non 200... -> " + error);
 
     // In cas of a 408 (timeout) continue polling / wait for next update
-    if (returnCode == 408) {
-        recursiveLongPoll(serverurl, successFunction, errorFunction, currentContent);
+    if (error.response.received === 408) {
+        console.log("Detected a 408");
+        observeResource(serverurl, successFunction, errorFunction, currentContent);
     } else {
-    // In any other case, stop. Something went wrong.
-        errorFunction(returnCode);
+        console.log("Detected a truly unexpected return code");
+        // In any other case, stop. Something went wrong.
+        errorFunction(errorMessage);
     }
 }

@@ -28,8 +28,8 @@ function enableJSElements() {
     // register clear button
     $('#clear-button').on('click', clearHistory);
 
-    // start long polling for incoming chat messages
-    recursiveLongPoll("getupdate?hash=", addMessageToLogAndBuffer, printErrorLog, "");
+    // observe the ARL resource for messages and register a handler for status changes.
+    observeResource("getupdate?hash=", addMessageToLogAndBuffer, printErrorLog, "");
 }
 
 /**

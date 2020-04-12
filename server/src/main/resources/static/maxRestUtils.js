@@ -29,8 +29,10 @@ function verifyReturnCode(reply, expectedValue) {
     if (reply.status == expectedValue) {
         return reply;
     } else {
-        console.log("Throwing an error...")
-        throw new Error('API replied with unexpected return code.')
+        // Embed expected and received codes in error object and fire it.
+        let error = new Error("Server replied with unexpected return code.");
+        error.response = {"expected":expectedValue, "received":reply.status};
+        throw error;
     }
 }
 
@@ -44,6 +46,7 @@ function verifyJsonContentType(reply) {
     if (contentType.includes('application/json')) {
         return reply;
     } else {
+        alert("Wrong content type!");
         throw new Error(`Sorry, content-type ${contentType} not supported.`)
     }
 }
