@@ -32,7 +32,10 @@ while [[ $server_available = true ]]; do
 	fi
 
 	# looks goot, lets send the message to the server
-	curl --header "Content-Type: text/plain"   --request POST   --data "Bash: $message"   http://127.0.0.1:8446/sendMessage
+	curl --header "Content-Type: application/json"   --request POST   --data "{\"sender\":\"Bash\",\"line\":\"$message\"}"   http://127.0.0.1:8446/sendMessage
 done
 
 exit -1
+
+
+{"sender":"tt","line":"test"}
