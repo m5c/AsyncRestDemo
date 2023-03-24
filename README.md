@@ -4,9 +4,9 @@ Just a little hands-on help, to get started with the ARL.
 
 ## About
 
-This repository hosts a demo asynchronous REST-backend, internally powered by the [Asynchronous Rest Library (ARL)](https://github.com/kartoffelquadrat/AsyncRestLib). Additionally, there are client-side counterparts.
+This repository hosts a demo asynchronous REST-backend, internally powered by the [Asynchronous Rest Library (ARL)](https://github.com/m5c/AsyncRestLib). Additionally, there are client-side counterparts.
  * The code here is meant as support for developers who want to use the ARL in their projects.
- * This is not an explanation of the library. For more information, consult the [ARL README](https://github.com/kartoffelquadrat/AsyncRestLib), or read the [ARL JavaDocs](https://kartoffelquadrat.github.io/AsyncRestLib/eu/kartoffelquadrat/asyncrestlib/package-summary.html).
+ * This is not an explanation of the library. For more information, consult the [ARL README](https://github.com/m5c/AsyncRestLib), or read the [ARL JavaDocs](https://m5c.github.io/AsyncRestLib/eu/kartoffelquadrat/asyncrestlib/package-summary.html).
 
 ## Context
 
@@ -16,7 +16,7 @@ The demo application is a HTTP based chat, consisting of a server and clients in
 
  * Written in Java / Spring-Boot.
    * Messages are "pushed" uniquely over HTTP/REST-endpoints.
-   * The server internally uses the [Asynchronous Rest Library (ARL)](https://github.com/kartoffelquadrat/AsyncRestLib).  
+   * The server internally uses the [Asynchronous Rest Library (ARL)](https://github.com/m5c/AsyncRestLib).  
    => [Take me to the interesting part of the code](server/src/main/java/eu/kartoffelquadrat/asyncrestdemo/StateController.java)
 
 ### Chat clients
@@ -61,7 +61,7 @@ The demo application is a HTTP based chat, consisting of a server and clients in
  
 To run the demo-application on your system, do the following:
  
- 1. Clone this repository: ```git clone https://github.com/kartoffelquadrat/AsyncRestDemo.git```
+ 1. Clone this repository: ```git clone https://github.com/m5c/AsyncRestDemo.git```
  2. Go into the downloaded directory and compile the sources: ```cd AsyncRestDemo; mvn clean package```
  3. Power up the server: ```java -jar server/target/server.jar```
  4. Run the clients:
@@ -79,6 +79,6 @@ To run the demo-application on your system, do the following:
 ## Contact / Pull Requests
  
  * Author: Maximilian Schiedermeier ![email](email.png)
- * Github: Kartoffelquadrat
+ * Github: m5c
  * Webpage: https://www.cs.mcgill.ca/~mschie3
  * License: [MIT](https://opensource.org/licenses/MIT)
